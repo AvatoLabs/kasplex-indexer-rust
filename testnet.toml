@@ -1,0 +1,83 @@
+debug = 2
+testnet = true
+isTestnet = true
+
+[startup]
+hysteresis = 3
+daaScoreRange = []
+tickReserved = []
+kaspaNodeURL = "https://testnet.kaspa.org:16110"
+isTestnet = true
+
+
+[rest]
+kaspaRestBaseURL = "https://api-tn10.kaspa.org"
+
+[http]
+bind = "0.0.0.0"
+port = 8080
+
+[rocksdb]
+path = "./data"
+
+[distributed.node]
+nodeId = "node_1"
+dataDir = "./data/distributed"
+shardCount = 8
+replicationFactor = 3
+nodes = []
+enabled = false
+role = "primary"
+port = 8080
+maxConnections = 1000
+
+[[distributed.shards]]
+shardId = 0
+dataDir = "./data/shard_0"
+isPrimary = true
+replicas = []
+weight = 1.0
+maxDataSize = 1024
+
+[distributed.replication]
+strategy = "async"
+timeout = 30
+maxRetries = 3
+retryInterval = 5
+enableCompression = true
+compressionLevel = 6
+
+[distributed.hashRing]
+virtualNodes = 150
+hashAlgorithm = "blake3"
+enabled = true
+ringSize = 1024
+
+[distributed.performance]
+writeBufferSize = 64
+maxWriteBufferNumber = 3
+targetFileSizeBase = 64
+maxBackgroundJobs = 4
+maxOpenFiles = 1000
+enableCompression = true
+compressionType = "lz4"
+batchSize = 1000
+concurrentReads = 8
+concurrentWrites = 4
+
+[distributed.monitoring]
+enabled = true
+healthCheckInterval = 30
+metricsInterval = 60
+logLevel = "info"
+enableMetrics = true
+enableTracing = false
+
+[distributed.security]
+enableAuth = false
+authKey = ""
+enableEncryption = false
+encryptionKey = ""
+enableSSL = false
+sslCertPath = ""
+sslKeyPath = ""

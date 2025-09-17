@@ -1,0 +1,137 @@
+[package]
+name = "kaspa-indexer-rust"
+version = "0.1.0"
+edition = "2024"
+authors = ["Avato Labs"]
+description = "Kaspa blockchain indexer executor in Rust"
+license = "MIT"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.0", features = ["full"] }
+once_cell = "1.19"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+toml = "0.8"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Database
+rocksdb = "0.24"
+
+# Crypto
+sha2 = "0.10"
+blake3 = "1.5"
+blake2b_simd = "1.0"
+blake2 = "0.10"
+hex = "0.4"
+num-bigint = "0.4"
+bech32 = "0.9"
+
+# Kaspa Address handling
+kaspa-addresses = "0.15.0"
+
+# Time handling
+chrono = { version = "0.4", features = ["serde"] }
+
+# HTTP client
+reqwest = { version = "0.11", features = ["json"] }
+
+# Protobuf
+prost = "0.12"
+tonic = "0.10"
+tonic-build = "0.10"
+tokio-stream = "0.1"
+futures-util = "0.3"
+
+# Utilities
+uuid = { version = "1.0", features = ["v4"] }
+rand = "0.8"
+
+# Configuration
+config = "0.13"
+
+# CLI
+clap = { version = "4.0", features = ["derive"] }
+
+# File handling
+flate2 = "1.0"
+
+# Network
+url = "2.0"
+
+# System calls
+libc = "0.2"
+
+# Lazy static
+lazy_static = "1.4"
+num-traits = "0.2.19"
+
+# HTTP server
+axum = { version = "0.8" }
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+[build-dependencies]
+tonic-build = "0.10"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[lib]
+name = "kaspa_indexer_rust"
+path = "src/lib.rs"
+
+[[bin]]
+name = "kaspa-indexer"
+path = "src/main.rs"
+
+[profile.dev]
+lto = false
+codegen-units = 1
+
+[profile.release]
+lto = false
+codegen-units = 1
+
+[[example]]
+name = "basic_demo"
+path = "examples/basic_demo.rs"
+
+[[example]]
+name = "tkas_testnet_demo"
+path = "examples/tkas_testnet_demo.rs"
+
+[[example]]
+name = "dragon_token_issuance"
+path = "examples/dragon_token_issuance.rs"
+
+[[example]]
+name = "dragon_transfer_demo"
+path = "examples/dragon_transfer_demo.rs"
+
+[[example]]
+name = "frontend_grpc_demo"
+path = "examples/frontend_grpc_demo.rs"
+
+[[example]]
+name = "verify_all_operations"
+path = "examples/verify_all_operations.rs"
+
+[[example]]
+name = "simple_script_verification"
+path = "examples/simple_script_verification.rs"
+
+[[example]]
+name = "verify_all_operations_hex_consistency"
+path = "examples/verify_all_operations_hex_consistency.rs"
+
+
+

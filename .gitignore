@@ -1,0 +1,93 @@
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Rust build artifacts
+/target/
+Cargo.lock
+*.pdb
+
+# Go build artifacts
+/main
+/kpexecutor
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Configuration files
+/config.json
+config.json
+*.env
+.env
+
+# Test data and temporary files
+test_data/
+testnet_data/
+*.log
+*.sst
+CURRENT
+IDENTITY
+LOCK
+LOG*
+MANIFEST-*
+OPTIONS-*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+*.temp
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Profiling data
+*.prof
+
+# Node.js (if any frontend tools are used)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if any Python scripts are used)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Documentation build
+docs/_build/
+site/
+
+# Temporary directories
+tmp/
+temp/

@@ -1,0 +1,84 @@
+
+{
+    "startup": {
+      "hysteresis": 3,
+      "daa_score_range": [],
+      "tick_reserved": [],
+      "kaspa_node_url": "http://localhost:16210",
+      "is_testnet": false
+    },
+  
+    "rocksdb": {
+      "path": "./data"
+    },
+    "distributed": {
+      "node": {
+        "node_id": "node_1",
+        "data_dir": "./data/distributed",
+        "shard_count": 8,
+        "replication_factor": 3,
+        "nodes": [],
+        "enabled": false,
+        "role": "primary",
+        "port": 8080,
+        "max_connections": 1000
+      },
+      "shards": [
+        {
+          "shard_id": 0,
+          "data_dir": "./data/shard_0",
+          "is_primary": true,
+          "replicas": [],
+          "weight": 1.0,
+          "max_data_size": 1024
+        }
+      ],
+      "replication": {
+        "strategy": "async",
+        "timeout": 30,
+        "max_retries": 3,
+        "retry_interval": 5,
+        "enable_compression": true,
+        "compression_level": 6
+      },
+      "hash_ring": {
+        "virtual_nodes": 150,
+        "hash_algorithm": "blake3",
+        "enabled": true,
+        "ring_size": 1024
+      },
+      "performance": {
+        "write_buffer_size": 64,
+        "max_write_buffer_number": 3,
+        "target_file_size_base": 64,
+        "max_background_jobs": 4,
+        "max_open_files": 1000,
+        "enable_compression": true,
+        "compression_type": "lz4",
+        "batch_size": 1000,
+        "concurrent_reads": 8,
+        "concurrent_writes": 4
+      },
+      "monitoring": {
+        "enabled": true,
+        "health_check_interval": 30,
+        "metrics_interval": 60,
+        "log_level": "info",
+        "enable_metrics": true,
+        "enable_tracing": false
+      },
+      "security": {
+        "enable_auth": false,
+        "auth_key": "",
+        "enable_encryption": false,
+        "encryption_key": "",
+        "enable_ssl": false,
+        "ssl_cert_path": "",
+        "ssl_key_path": ""
+      }
+    },
+    "debug": 2,
+    "testnet": true,
+    "is_testnet": true
+  }
+  

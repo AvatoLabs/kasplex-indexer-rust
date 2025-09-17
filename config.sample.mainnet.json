@@ -1,0 +1,13 @@
+{
+    "startup": {
+        "hysteresis": 3,
+        "daaScoreRange": [],
+        "tickReserved": []
+    },
+
+    "rocksdb": {
+        "path": "./data"
+    },
+    "testnet": false,
+    "debug": 2
+}

@@ -42,44 +42,10 @@ A high-performance Kaspa KRC-20 token indexer implemented in Rust, providing 100
 - ✅ List - Token listing
 - ✅ Chown - Token ownership transfer
 - ✅ Blacklist - Token blacklisting
-
-### Storage Performance
-
-| Storage Type | Response Time | Throughput | Complexity | Cost |
-|--------------|---------------|------------|------------|------|
-| ~~Cassandra~~ | ~~~10ms~~ | ~~10K ops/s~~ | ~~High~~ | ~~High~~ |
-| **RocksDB** | **~4µs** | **100K+ ops/s** | **Low** | **Low** |
-| **RocksDB Distributed** | **~8µs** | **1M+ ops/s** | **Medium** | **Low** |
-| Improvement | **2500x faster** | **100x higher** | **Simpler** | **Lower** |
-
-## 🏗️ Architecture
-
-```
-src/
-├── config/          # Configuration management
-│   ├── types.rs     # Configuration types
-│   └── loader.rs    # Configuration loader
-├── storage/         # Storage layer
-│   ├── distributed.rs # Distributed RocksDB storage
-│   ├── rocksdb.rs   # Single RocksDB storage
-│   ├── state.rs     # State management
-│   └── runtime.rs   # Runtime management
-├── operations/      # Operation handling (all KRC-20 operations)
-├── explorer/        # Blockchain scanning and synchronization
-├── protobuf/        # RPC communication
-├── http/            # HTTP REST API gateway
-│   └── mod.rs       # Kasplex-compatible endpoints
-└── utils/           # Utility functions
-    ├── address.rs   # Address processing
-    ├── script.rs    # Script parsing
-    ├── batch.rs     # Batch processing
-    └── crypto.rs    # Cryptographic functions
-```
-
 ## 🛠️ Installation
 
 ### Prerequisites
-- Rust 1.70+ (Edition 2024)
+- Rust 1.89+ (Edition 2024)
 - RocksDB (built-in)
 - Kaspa node (for RPC communication)
 - HTTP client (for REST API testing)
@@ -371,14 +337,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - ✅ **Public REST Integration** - Optional Kaspa public API integration
 - ✅ **Rust Edition 2024** - Latest Rust features and improvements
 
-### Migration from Go Version
-- **Storage Engine**: Migrated from Cassandra to RocksDB
-- **Performance**: 2500x faster response times
-- **Complexity**: Reduced deployment complexity
-- **Cost**: Lower operational costs
-- **Reliability**: Better ACID compliance and data consistency
-- **HTTP API**: Added Kasplex-compatible REST gateway
-- **Frontend Integration**: Seamless integration with Kasplex SDK
 
 ## 📞 Support
 

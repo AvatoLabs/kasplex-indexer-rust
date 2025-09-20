@@ -129,25 +129,31 @@ pub fn validate_amount(amount: &mut String) -> bool {
         return false;
     }
 
-    // Use string comparison to validate large integers, corresponding to Go version's big.Int validation logic
-    let amount_str = amount.as_str();
+    // Use num-bigint for precise large integer validation
+    use num_bigint::BigInt;
+    use std::str::FromStr;
 
-    // Check if it's a valid numeric string
-    if !amount_str.chars().all(|c| c.is_ascii_digit()) {
+    // Parse the amount as BigInt
+    let amount_big = match BigInt::from_str(amount) {
+        Ok(val) => val,
+        Err(_) => return false, // Invalid number format
+    };
+
+    // Check if amount is zero
+    if amount_big == BigInt::from(0) {
         return false;
     }
 
-    // Check if it exceeds the limit
-    let limit = "99999999999999999999999999999999";
-    if amount_str == "0" {
-        return false; // Corresponding to Go version's limitBig.Cmp(amountBig) >= 0
-    }
-
-    // Compare string length and value
-    if amount_str.len() > limit.len() {
+    // Check if amount is negative
+    if amount_big < BigInt::from(0) {
         return false;
     }
-    if amount_str.len() == limit.len() && amount_str > limit {
+
+    // Check if it exceeds the limit (99999999999999999999999999999999)
+    let limit_big = BigInt::from_str("99999999999999999999999999999999")
+        .expect("Limit should be a valid number");
+    
+    if amount_big > limit_big {
         return false;
     }
 

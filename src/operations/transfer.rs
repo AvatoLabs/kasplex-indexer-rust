@@ -97,12 +97,12 @@ impl TransferOperation {
             if let Some(token_option) = token_result {
                 if token_option.is_none() {
                     op_data.op_accept = -1;
-                    op_data.op_error = "tick not found".to_string();
+                    op_data.op_error = format!("Token '{}' not found", tick);
                     return Ok(());
                 }
             } else {
                 op_data.op_accept = -1;
-                op_data.op_error = "tick not found".to_string();
+                op_data.op_error = format!("Token '{}' not found", tick);
                 return Ok(());
             }
         }
@@ -118,7 +118,7 @@ impl TransferOperation {
                     .is_some()
                 {
                     op_data.op_accept = -1;
-                    op_data.op_error = "blacklist".to_string();
+                    op_data.op_error = format!("Address '{}' is blacklisted for token '{}'", from, tick);
                     return Ok(());
                 }
             }
@@ -127,14 +127,14 @@ impl TransferOperation {
         // Validate address
         if op_script.from == op_script.to {
             op_data.op_accept = -1;
-            op_data.op_error = "address invalid".to_string();
+            op_data.op_error = "Cannot transfer to the same address".to_string();
             return Ok(());
         }
 
         if let Some(to) = &op_script.to {
             if !verify_address(to, testnet) {
                 op_data.op_accept = -1;
-                op_data.op_error = "address invalid".to_string();
+                op_data.op_error = format!("Invalid address: {}", to);
                 return Ok(());
             }
         }
@@ -169,7 +169,7 @@ impl TransferOperation {
         // Check sender balance
         if st_balance_from.is_none() {
             op_data.op_accept = -1;
-            op_data.op_error = "balance insuff".to_string();
+            op_data.op_error = format!("Insufficient balance for token '{}'", tick);
             return Ok(());
         }
 
@@ -184,7 +184,7 @@ impl TransferOperation {
 
         if amt_big > balance_big {
             op_data.op_accept = -1;
-            op_data.op_error = "balance insuff".to_string();
+            op_data.op_error = format!("Insufficient balance: required {}, available {}", amt_big, balance_big);
             return Ok(());
         } else if amt_big == balance_big && balance_from.locked == "0" {
             n_tick_affc = -1;

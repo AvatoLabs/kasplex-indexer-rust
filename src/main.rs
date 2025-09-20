@@ -174,27 +174,36 @@ fn set_working_directory() -> Result<()> {
     Ok(())
 }
 
-// File lock functionality in Go version
+// File lock functionality using safer approach
 fn acquire_file_lock() -> Result<fs::File> {
     let lock_path = "./.lockExecutor";
 
-    // Create lock file
+    // Create lock file with proper permissions
     let lock_file = fs::OpenOptions::new()
         .create(true)
         .write(true)
         .read(true)
-        .mode(0o644)
+        .mode(0o600) // More restrictive permissions
         .open(lock_path)?;
 
-    // Try to acquire exclusive lock
+    // Try to acquire exclusive lock using safer approach
     let fd = lock_file.as_raw_fd();
-    unsafe {
-        let result = libc::flock(fd, libc::LOCK_EX | libc::LOCK_NB);
-        if result != 0 {
-            return Err(anyhow::anyhow!(
-                "Failed to acquire file lock: another instance is running"
-            ));
-        }
+    
+    // Use fcntl instead of flock for better portability
+    let result = unsafe {
+        libc::fcntl(fd, libc::F_SETLK, &libc::flock {
+            l_type: libc::F_WRLCK as i16,
+            l_whence: libc::SEEK_SET as i16,
+            l_start: 0,
+            l_len: 0,
+            l_pid: 0,
+        })
+    };
+    
+    if result != 0 {
+        return Err(anyhow::anyhow!(
+            "Failed to acquire file lock: another instance is running"
+        ));
     }
 
     info!("File lock acquired: {}", lock_path);
@@ -203,8 +212,20 @@ fn acquire_file_lock() -> Result<fs::File> {
 
 fn release_file_lock(lock_file: fs::File) -> Result<()> {
     let fd = lock_file.as_raw_fd();
-    unsafe {
-        libc::flock(fd, libc::LOCK_UN);
+    
+    // Release the lock
+    let result = unsafe {
+        libc::fcntl(fd, libc::F_SETLK, &libc::flock {
+            l_type: libc::F_UNLCK as i16,
+            l_whence: libc::SEEK_SET as i16,
+            l_start: 0,
+            l_len: 0,
+            l_pid: 0,
+        })
+    };
+    
+    if result != 0 {
+        tracing::warn!("Failed to release file lock");
     }
 
     // Remove lock file

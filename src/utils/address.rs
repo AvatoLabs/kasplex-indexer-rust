@@ -3,21 +3,39 @@ use anyhow::Result;
 use hex;
 use kaspa_addresses::{Address, Prefix, Version};
 
-/// Verify Kaspa address using logic consistent with Go version: parse->restore->compare
+/// Verify Kaspa address using official kaspa-addresses library
 pub fn verify_address(address: &str, testnet: bool) -> bool {
-    let (ver, kpub) = conv_addr_to_kpub(address, testnet);
-    if kpub.is_empty() {
-        return false;
+    // Use official Kaspa address library for validation
+    match Address::try_from(address) {
+        Ok(addr) => {
+            // Verify the address is valid for the correct network
+            let expected_prefix = if testnet {
+                Prefix::Testnet
+            } else {
+                Prefix::Mainnet
+            };
+            
+            // Check if the address prefix matches the expected network
+            match addr.prefix {
+                Prefix::Testnet => testnet,
+                Prefix::Mainnet => !testnet,
+                _ => false,
+            }
+        }
+        Err(_) => {
+            // Fallback to legacy validation for backward compatibility
+            let (ver, kpub) = conv_addr_to_kpub(address, testnet);
+            if kpub.is_empty() {
+                return false;
+            }
+            let addr2 = if ver == "08" {
+                conv_kpub_to_p2sh(&kpub, testnet)
+            } else {
+                conv_kpub_to_addr(&kpub, testnet)
+            };
+            addr2 == address
+        }
     }
-    let addr2 = if ver == "08" {
-        conv_kpub_to_p2sh(&kpub, testnet)
-    } else {
-        conv_kpub_to_addr(&kpub, testnet)
-    };
-    if addr2 != address {
-        return false;
-    }
-    true
 }
 
 /// Decode Kaspa address using official kaspa-addresses library (preserved)
